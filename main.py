@@ -1,0 +1,18 @@
+# pyrefly: ignore [missing-import]
+from fastapi import FastAPI
+# pyrefly: ignore [missing-import]
+from pydantic import BaseModel
+app = FastAPI()
+fake_todo_db = []
+class TodoItem(BaseModel):
+    id: int
+    title: str
+    is_completed: bool = False
+@app.get("/todos")
+async def get_all_todos():
+    return{"Total_Tasks": len(fake_todo_db), "Tasks": fake_todo_db}
+@app.post("/todos")
+async def create_todo(new_task: TodoItem):
+    task_dict = new_task.dict()
+    fake_todo_db.append(task_dict)
+    return{"Message": "Task successfully created!", "Tasks":task_dict}
