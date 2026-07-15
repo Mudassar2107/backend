@@ -1,7 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
+import models
+from database import engine, SessionLocal
+
 app = FastAPI()
-fake_todo_db = []
+models.Base.metadata.create_all(bind=engine)
+
+
 class TodoItem(BaseModel):
     id: int
     title: str
